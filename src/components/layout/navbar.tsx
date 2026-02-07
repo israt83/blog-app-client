@@ -68,6 +68,7 @@ const Navbar = ({
     { title: "Blog", url: "/blog" },
     { title: "Contact", url: "/contact" },
     { title: "Dashboard", url: "/dashboard" }
+   
     
     
   ],
