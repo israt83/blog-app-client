@@ -122,9 +122,16 @@ function AppSidebar() {
 
 export default function DashboardLayout({
   children,
+  admin,
+  user
 }: {
   children: React.ReactNode;
+  admin: React.ReactNode;
+  user: React.ReactNode;
 }) {
+  const userInfo = {
+    role: "admin"
+  }
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -147,7 +154,9 @@ export default function DashboardLayout({
         </header>
 
         <main className="flex flex-1 flex-col gap-4 p-4">
-          {children}
+        {
+          userInfo.role === "admin" ? admin : user
+        }
         </main>
       </SidebarInset>
     </SidebarProvider>
