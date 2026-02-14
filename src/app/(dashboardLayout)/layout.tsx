@@ -65,9 +65,7 @@ function AppSidebar() {
                 <div className="size-8 rounded bg-primary" />
                 <div className="flex flex-col">
                   <span className="font-medium">My Dashboard</span>
-                  <span className="text-xs text-muted-foreground">
-                    Admin Panel
-                  </span>
+                  
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -77,7 +75,7 @@ function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Overview</SidebarGroupLabel>
+          {/* <SidebarGroupLabel>Overview</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
@@ -143,9 +141,11 @@ export default function DashboardLayout({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/dashboard">Overview</BreadcrumbLink>
+                <BreadcrumbLink href="/dashboard">
+                {/* Overview */}
+                </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              {/* <BreadcrumbSeparator /> */}
               <BreadcrumbItem>
                 <BreadcrumbPage>Dashboard</BreadcrumbPage>
               </BreadcrumbItem>
