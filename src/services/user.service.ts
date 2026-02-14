@@ -1,5 +1,8 @@
 
+import { env } from "@/env";
 import { cookies } from "next/headers"
+
+const authUrl = env.AUTH_URL 
 
 
 export const userService = {
@@ -8,7 +11,7 @@ export const userService = {
             const cookieStore = await cookies();
             console.log(cookieStore.toString())
 
-            const res = await fetch('http://localhost:3000/api/auth/get-session', {
+            const res = await fetch(`${authUrl}/get-session`, {
                 headers: {
                     cookie: cookieStore.toString()
                 },
