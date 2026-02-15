@@ -75,7 +75,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
         </div>
 
         <Link
-          href={`/blogs/${post.id}`}
+          href={`/blog/${post.id}`}
           className="text-sm font-semibold text-primary group-hover:underline"
         >
           Read More &rarr;
