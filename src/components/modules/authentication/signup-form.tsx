@@ -11,13 +11,30 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { authClient } from "@/lib/auth-client"
 import {useForm} from "@tanstack/react-form"
+import { toast } from "sonner"
+import * as z from "zod"
+
+const fromSchema = z.object({
+  name : z.string().min(1,'This field is required'),
+  email : z.string().email('Invalid email'),
+  password : z.string().min(8,'Minimum 8 characters')
+})
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const handleGoogleLogin = async () => {
+        const data = authClient.signIn.social({
+          provider : 'google',
+          callbackURL : 'http://localhost:3001' 
+        })
+        console.log(data)
+  }
 
   const form = useForm({
     defaultValues :{
@@ -25,8 +42,22 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       email : '',
       password : ''
     },
+
+    validators :{
+      onSubmit : fromSchema
+    },
     onSubmit : async({value}) => {
-      console.log('Submitedd.....', value)
+      const tostId = toast.loading('Creating account...')
+      try {
+        const {error, data} = await authClient.signUp.email(value);
+        if(error){
+          toast.error(error.message,{id : tostId})
+          return
+        }
+         toast.success('User created successfully',{id : tostId})
+      } catch (error) {
+        toast.error('Something went wrong, please try again',{id : tostId})
+      }
     }
   })
   return (
@@ -44,7 +75,8 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
         }}>
           <FieldGroup>
             <form.Field name="name" children={(field) =>{
-
+               const isInvalid =
+          field.state.meta.isTouched && !field.state.meta.isValid
               return (
                 <Field>
               <FieldLabel htmlFor={field.name}>Name</FieldLabel>
@@ -58,13 +90,15 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 field.handleChange(e.target.value)
               }}
               />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
             </Field>
               )
             }}>
             
             </form.Field>
             <form.Field name="email" children={(field) =>{
-
+              const isInvalid =
+          field.state.meta.isTouched && !field.state.meta.isValid
               return (
                 <Field>
               <FieldLabel htmlFor={field.name}>Email</FieldLabel>
@@ -78,13 +112,15 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 field.handleChange(e.target.value)
               }}
               />
+              {isInvalid && <FieldError errors={field.state.meta.errors} />}
             </Field>
               )
             }}>
             
             </form.Field>
             <form.Field name="password" children={(field) =>{
-
+               const isInvalid =
+          field.state.meta.isTouched && !field.state.meta.isValid
               return (
                 <Field>
               <FieldLabel htmlFor={field.name}>Password</FieldLabel>
@@ -98,6 +134,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 field.handleChange(e.target.value)
               }}
               />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
             </Field>
               )
             }}>
@@ -106,8 +143,11 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter className="">
-        <Button form="signup-form" type="submit">Sign Up</Button>
+      <CardFooter className="flex flex-col gap-4 justify-end">
+        <Button className="w-full" form="signup-form" type="submit">Sign Up</Button>
+         <Button className="w-full" onClick={() => handleGoogleLogin()} variant="outline" type="button">
+                  Continue with Google
+                </Button>
       </CardFooter>
     </Card>
   )
