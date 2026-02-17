@@ -41,6 +41,7 @@ export const blogService = {
       if (options?.revalidate) {
         config.next = { revalidate: options.revalidate };
       }
+      
 
       const res = await fetch(url.toString(), config);
 
